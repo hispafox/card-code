@@ -1,0 +1,37 @@
+#ifndef UTILIDADES_H
+#define UTILIDADES_H
+
+#include <stdint.h>
+
+static inline uint8_t util_minimo(uint8_t a, uint8_t b)
+{
+    return (a < b) ? a : b;
+}
+
+static inline uint16_t util_leer_u16(const uint8_t *p)
+{
+    return (uint16_t)(((uint16_t)p[0] << 8) | p[1]);
+}
+
+static inline void util_escribir_u16(uint8_t *p, uint16_t valor)
+{
+    p[0] = (uint8_t)(valor >> 8);
+    p[1] = (uint8_t)valor;
+}
+
+/* Avisa de que una comprobación no se ha cumplido, con el fichero y la línea. */
+void util_fallo(const char *fichero, uint16_t linea);
+
+#define UTIL_COMPROBAR(c)                     \
+    do {                                      \
+        if (!(c)) {                           \
+            util_fallo(__FILE__, __LINE__);   \
+        }                                     \
+    } while (0)
+
+/* Solo en el equipo de desarrollo: cuántos fallos se han avisado y el último. */
+uint16_t util_fallos(void);
+uint16_t util_ultimo_fallo_linea(void);
+void     util_reiniciar_fallos(void);
+
+#endif /* UTILIDADES_H */
