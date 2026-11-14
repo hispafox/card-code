@@ -24,4 +24,11 @@ uint8_t memoria_leer_byte(uint8_t numero, uint8_t posicion);
 /* Solo en el equipo de desarrollo: hace que las escrituras de registros fallen. */
 void memoria_simular_fallo(int activo);
 
+/*
+ * Solo en el equipo de desarrollo: simula un corte de alimentación en la
+ * lectura número «lectura» de la memoria (contando desde esta llamada),
+ * llamando a «cortar», que no vuelve. Con 0 se desactiva.
+ */
+void memoria_simular_corte(uint16_t lectura, void (*cortar)(void));
+
 #endif

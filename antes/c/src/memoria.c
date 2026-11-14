@@ -6,15 +6,23 @@
 
 static uint8_t memoria[TAM_MEMORIA];
 static int fallo_simulado = 0;
+static uint16_t lectura_del_corte = 0;
+static uint16_t lecturas = 0;
+static void (*corte)(void) = 0;
 
 void memoria_formatear(void)
 {
     memset(memoria, 0, sizeof memoria);
     fallo_simulado = 0;
+    lectura_del_corte = 0;
 }
 
 uint8_t mem_leer(uint16_t direccion)
 {
+    if (lectura_del_corte != 0 && ++lecturas == lectura_del_corte) {
+        lectura_del_corte = 0;
+        corte();
+    }
     if (direccion >= TAM_MEMORIA) {
         return 0;
     }
@@ -53,4 +61,11 @@ uint8_t memoria_leer_byte(uint8_t numero, uint8_t posicion)
 void memoria_simular_fallo(int activo)
 {
     fallo_simulado = activo;
+}
+
+void memoria_simular_corte(uint16_t lectura, void (*cortar)(void))
+{
+    lectura_del_corte = lectura;
+    lecturas = 0;
+    corte = cortar;
 }
