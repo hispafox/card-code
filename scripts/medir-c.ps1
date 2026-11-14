@@ -22,7 +22,7 @@ function Medir([string]$version) {
     $dirC = Join-Path (Carpeta-Version $version) 'c'
     $salida = Nueva-Carpeta (Join-Path $Raiz "build\$version\objetos")
     $tabla = [ordered]@{}
-    foreach ($fuente in Get-ChildItem (Join-Path $dirC 'src') -Filter '*.c') {
+    foreach ($fuente in Get-ChildItem (Join-Path $dirC 'src\*') -Include '*.c', '*.S') {
         $objeto = Join-Path $salida ($fuente.BaseName + '.o')
         Ejecutar $Gcc ($OpcionesC + @('-Os', '-I', (Join-Path $dirC 'include'), '-c', $fuente.FullName, '-o', $objeto))
         $bytes = 0
