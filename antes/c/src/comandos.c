@@ -19,6 +19,11 @@ uint8_t ultimo_ins;
 uint8_t ultimo_lc;
 uint16_t num_cmd;
 uint16_t num_err;
+uint8_t flag3;
+uint8_t buf3[4];
+int res;
+uint16_t aux;
+uint8_t modo;
 
 int chk(uint8_t *b, int n)
 {
