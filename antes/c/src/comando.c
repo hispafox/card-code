@@ -13,7 +13,6 @@ uint8_t estado;
 static uint16_t validar(const uint8_t *b, uint8_t n)
 {
     cabecera_t cabecera;
-    uint8_t intentos = contador;
 
     cabecera.ins = b[1];
     cabecera.longitud = b[4];
@@ -24,8 +23,8 @@ static uint16_t validar(const uint8_t *b, uint8_t n)
         if (n < 5 || b[4] > 8) {
             return 0x6700;
         }
-        if (intentos == 0) {
-            return 0x6982;
+        if (pin_intentos_restantes() == 0) {
+            return 0x6983;
         }
     }
     if (cabecera.ins == 0x30 || cabecera.ins == 0x32) {

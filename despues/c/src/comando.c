@@ -28,7 +28,7 @@ static uint16_t comando_validar(const uint8_t *apdu, uint8_t longitud)
             return COMANDO_SW_LONGITUD_INCORRECTA;
         }
         if (pin_intentos_restantes() == 0u) {
-            return COMANDO_SW_SEGURIDAD_NO_SATISFECHA;
+            return COMANDO_SW_METODO_BLOQUEADO;
         }
     }
     if (apdu[COMANDO_POSICION_INS] == COMANDO_INS_PAGAR

@@ -35,3 +35,8 @@ uint8_t verificar(const uint8_t *pin, uint8_t longitud)
     contador = 3;
     return 1;
 }
+
+uint8_t pin_intentos_restantes(void)
+{
+    return contador;
+}

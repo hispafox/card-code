@@ -9,16 +9,17 @@
 #define COMANDO_POSICION_DATOS      5u
 #define COMANDO_LONGITUD_CABECERA 5u
 #define COMANDO_LONGITUD_MAXIMA  64u
+#define COMANDO_SW_SIN_ERROR     0x9000u
 
 /* Códigos de estado de la respuesta, con los valores de ISO/IEC 7816-4. */
-#define COMANDO_SW_SIN_ERROR                0x9000u
 #define COMANDO_SW_PIN_INCORRECTO           0x6300u
 #define COMANDO_SW_LONGITUD_INCORRECTA      0x6700u
 #define COMANDO_SW_SEGURIDAD_NO_SATISFECHA  0x6982u
+#define COMANDO_SW_METODO_BLOQUEADO         0x6983u
 #define COMANDO_SW_SALDO_INSUFICIENTE       0x6985u
 #define COMANDO_SW_IMPORTE_EXCESIVO         0x6A80u
 #define COMANDO_SW_INS_NO_ADMITIDA          0x6D00u
-#define COMANDO_SW_LONGITUD                 2u
+#define COMANDO_SW_LONGITUD      2u
 
 typedef enum {
     COMANDO_INS_VERIFICAR_PIN = 0x20,

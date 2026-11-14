@@ -10,4 +10,7 @@ void    inicializar(void);
 uint8_t verificar(const uint8_t *pin, uint8_t longitud);
 extern uint8_t contador;
 
+/* Añadida después, ya con el prefijo del módulo. */
+uint8_t pin_intentos_restantes(void);
+
 #endif

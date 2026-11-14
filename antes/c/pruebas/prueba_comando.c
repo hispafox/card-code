@@ -73,12 +73,12 @@ static void test_un_comando_mas_largo_que_el_maximo_se_rechaza(void)
     TEST_ASSERT_EQUAL_HEX16(0x6700, comando_procesar(apdu, sizeof apdu));
 }
 
-static void test_con_el_pin_bloqueado_la_seguridad_no_se_satisface(void)
+static void test_con_el_pin_bloqueado_se_responde_metodo_bloqueado(void)
 {
     for (int i = 0; i < 3; i++) {
         enviar(0x20, PIN_EQUIVOCADO, sizeof PIN_EQUIVOCADO);
     }
-    TEST_ASSERT_EQUAL_HEX16(0x6982, enviar(0x20, PIN_TITULAR, sizeof PIN_TITULAR));
+    TEST_ASSERT_EQUAL_HEX16(0x6983, enviar(0x20, PIN_TITULAR, sizeof PIN_TITULAR));
 }
 
 static void test_se_paga_hasta_el_saldo_exacto_y_nada_mas(void)
@@ -133,7 +133,7 @@ int main(void)
     RUN_TEST(test_un_pin_mas_largo_que_el_maximo_se_rechaza);
     RUN_TEST(test_un_comando_mas_corto_que_la_cabecera_se_rechaza);
     RUN_TEST(test_un_comando_mas_largo_que_el_maximo_se_rechaza);
-    RUN_TEST(test_con_el_pin_bloqueado_la_seguridad_no_se_satisface);
+    RUN_TEST(test_con_el_pin_bloqueado_se_responde_metodo_bloqueado);
     RUN_TEST(test_se_paga_hasta_el_saldo_exacto_y_nada_mas);
     RUN_TEST(test_pagar_sin_pin_se_rechaza);
     RUN_TEST(test_una_recarga_por_encima_del_saldo_maximo_se_rechaza);
