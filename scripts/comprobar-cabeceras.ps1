@@ -21,7 +21,8 @@ Write-Host "Cabeceras que compilan solas · $Version" -ForegroundColor Cyan
 $fallan = 0
 foreach ($cabecera in Get-ChildItem $include -Filter '*.h') {
     $prueba = Join-Path $salida ($cabecera.BaseName + '_sola.c')
-    Set-Content -Path $prueba -Value "#include `"$($cabecera.Name)`"" -Encoding ascii
+    # La segunda línea evita el error de un fichero vacío cuando la cabecera solo trae macros.
+    Set-Content -Path $prueba -Value @("#include `"$($cabecera.Name)`"", 'typedef int cabecera_sola;') -Encoding ascii
     # Los errores de gcc llegan por stderr; aquí no deben parar el script.
     $ErrorActionPreference = 'Continue'
     $mensajes = & $Gcc @($opciones + @('-I', $include, '-fsyntax-only', $prueba)) 2>&1 | ForEach-Object { "$_" }
