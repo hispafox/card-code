@@ -9,7 +9,7 @@
 | Dependencias · declarar el tipo en lugar de incluir | `registro.h` incluye `comando.h` | `struct comando_respuesta;` | `c/include/registro.h` |
 | Dependencias · sacar lo compartido a su cabecera | `pin.h` incluye `comando.h` por los códigos de estado, y `comando.h` incluye `pin.h` | `comando_sw.h`, que incluyen el PIN y el comando | `c/include/comando_sw.h`, `c/include/pin.h` |
 
-**Una diferencia con la base, decidida por Pedro (14-11-2026):** en el antes, `comando.h` **lleva guarda**. La base dice que no la tiene, pero sin guarda y con el ciclo entre `pin.h` y `comando.h` el antes no compila: en cuanto un fichero incluye `comando.h`, `comando_respuesta` se define dos veces. Con la guarda, el antes compila y conserva el ciclo y las cabeceras que no incluyen `<stdint.h>`. Por eso los `.c` del antes incluyen `<stdint.h>` antes que nada.
+**Por qué el antes lleva guarda en `comando.h`:** sin ella, con el ciclo entre `pin.h` y `comando.h`, el antes no compilaría: en cuanto un fichero incluye `comando.h`, `comando_respuesta` se definiría dos veces. Con la guarda, el antes compila y conserva el ciclo y las cabeceras que no incluyen `<stdint.h>`. Por eso los `.c` del antes incluyen `<stdint.h>` antes que nada.
 
 **El script que lo enseña:** `.\scripts\comprobar-cabeceras.ps1` compila cada cabecera sola, con una única línea `#include`. En el antes fallan las cuatro (`uint8_t` sin definir); en el después compilan todas.
 
