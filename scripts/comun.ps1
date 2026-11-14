@@ -72,7 +72,12 @@ function Probar-CodigoC([string]$dirC, [string]$salida) {
         # Unity se compila aparte, sin -Werror: es código de terceros.
         $unityObj = Join-Path $salida 'unity.o'
         if (-not (Test-Path $unityObj)) { Ejecutar $Gcc @('-std=c99', '-c', (Join-Path $Unity 'unity.c'), '-o', $unityObj) }
-        Ejecutar $Gcc ($OpcionesC + @('-I', (Join-Path $dirC 'include'), '-I', $Unity) +
+        # Un fichero de pruebas puede pedir opciones propias en <nombre>.opciones
+        # (por ejemplo, un espía de memset con -Wl,--wrap=memset).
+        $extra = @()
+        $ficheroOpciones = [IO.Path]::ChangeExtension($prueba.FullName, '.opciones')
+        if (Test-Path $ficheroOpciones) { $extra = @((Get-Content $ficheroOpciones -Raw).Trim() -split '\s+') }
+        Ejecutar $Gcc ($OpcionesC + $extra + @('-I', (Join-Path $dirC 'include'), '-I', $Unity) +
                        $fuentes + @($prueba.FullName, $unityObj, '-o', $exe))
         & $exe | Out-Host
         if ($LASTEXITCODE -ne 0) { $fallos++ }
