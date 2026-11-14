@@ -29,6 +29,7 @@ Desde la raíz del repositorio, en PowerShell:
 | `.\scripts\probar.ps1 -Version antes` | Pasa todas las pruebas de una versión (`antes` o `despues`) |
 | `.\scripts\probar-c.ps1 -Version despues` | Solo las pruebas de C |
 | `.\scripts\probar-java.ps1 -Version despues` | Solo las del applet, con jcardsim y Spock |
+| `.\scripts\comprobar-cabeceras.ps1 -Version despues` | Comprueba que cada cabecera de C compila sola, con una única línea `#include` |
 | `.\scripts\medir-c.ps1` | Compila cada módulo de C para tamaño (`-Os`) y compara los bytes del antes y del después |
 
 Si PowerShell no deja ejecutar scripts, ábrelo con `powershell -ExecutionPolicy Bypass` o lanza cada uno con `powershell -ExecutionPolicy Bypass -File .\scripts\<script>.ps1`.
