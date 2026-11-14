@@ -24,7 +24,7 @@ function Medir([string]$version) {
     $tabla = [ordered]@{}
     foreach ($fuente in Get-ChildItem (Join-Path $dirC 'src\*') -Include '*.c', '*.S') {
         $objeto = Join-Path $salida ($fuente.BaseName + '.o')
-        Ejecutar $Gcc ($OpcionesC + @('-Os', '-I', (Join-Path $dirC 'include'), '-c', $fuente.FullName, '-o', $objeto))
+        Ejecutar $Gcc ($OpcionesC + (Opciones-Version $dirC) + @('-Os', '-I', (Join-Path $dirC 'include'), '-c', $fuente.FullName, '-o', $objeto))
         $bytes = 0
         foreach ($linea in & $Size -A $objeto) {
             $campos = "$linea".Trim() -split '\s+'
