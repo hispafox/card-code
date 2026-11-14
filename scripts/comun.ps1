@@ -61,7 +61,8 @@ function Nueva-Carpeta([string]$ruta) {
 # ejecutable por fichero de pruebas, y los ejecuta. Devuelve los ficheros en rojo.
 function Probar-CodigoC([string]$dirC, [string]$salida) {
     Preparar-Gcc
-    $fuentes = @(Get-ChildItem (Join-Path $dirC 'src') -Filter '*.c' | ForEach-Object FullName)
+    # Fuentes en C y en ensamblador (.S, que pasa por el preprocesador de C).
+    $fuentes = @(Get-ChildItem (Join-Path $dirC 'src\*') -Include '*.c', '*.S' | ForEach-Object FullName)
     $pruebas = @(Get-ChildItem (Join-Path $dirC 'pruebas') -Filter 'prueba_*.c')
     if ($pruebas.Count -eq 0) { throw "No hay pruebas en $dirC\pruebas." }
     Nueva-Carpeta $salida | Out-Null
