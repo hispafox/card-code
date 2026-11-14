@@ -13,8 +13,11 @@ param(
 . "$PSScriptRoot\comun.ps1"
 Preparar-Gcc
 
-# Compila cada fichero .c a objeto y devuelve, por módulo, el código y los
-# datos constantes (text) más los datos inicializados (data), según «size».
+# Compila cada fichero .c a objeto y devuelve, por módulo, lo que acabaría en
+# la memoria del chip: el código (.text), las constantes (.rdata) y los datos
+# inicializados (.data). Se dejan fuera las tablas de excepciones de Windows
+# (.pdata y .xdata) y la firma del compilador (.rdata$zzz), que en la tarjeta
+# no existen, y la RAM sin inicializar (.bss).
 function Medir([string]$version) {
     $dirC = Join-Path (Carpeta-Version $version) 'c'
     $salida = Nueva-Carpeta (Join-Path $Raiz "build\$version\objetos")
@@ -22,8 +25,14 @@ function Medir([string]$version) {
     foreach ($fuente in Get-ChildItem (Join-Path $dirC 'src') -Filter '*.c') {
         $objeto = Join-Path $salida ($fuente.BaseName + '.o')
         Ejecutar $Gcc ($OpcionesC + @('-Os', '-I', (Join-Path $dirC 'include'), '-c', $fuente.FullName, '-o', $objeto))
-        $linea = (& $Size $objeto | Select-Object -Skip 1 | Select-Object -First 1).Trim() -split '\s+'
-        $tabla[$fuente.Name] = [int]$linea[0] + [int]$linea[1]
+        $bytes = 0
+        foreach ($linea in & $Size -A $objeto) {
+            $campos = "$linea".Trim() -split '\s+'
+            if ($campos.Count -ge 2 -and $campos[0] -match '^\.(text|rdata|data)' -and $campos[0] -ne '.rdata$zzz') {
+                $bytes += [int]$campos[1]
+            }
+        }
+        $tabla[$fuente.Name] = $bytes
     }
     return $tabla
 }
