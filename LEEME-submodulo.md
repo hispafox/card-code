@@ -10,6 +10,8 @@
 
 Las pruebas (`c/pruebas/prueba_comandos.c`) son idénticas en las dos versiones: solo mandan comandos y miran la respuesta, sin saber cómo está hecho el módulo por dentro.
 
+**El aviso que apaga el antes:** desde el submódulo 3.3, las opciones del repositorio llevan `-Wconversion`. El antes es el código heredado del curso y da cuatro avisos con esa opción (tres de `-Wsign-conversion`, por un `int` que se pasa como tamaño), así que `antes/c/compilar.opciones` la quita con `-Wno-conversion`. El después compila con ella.
+
 ```powershell
 .\scripts\probar.ps1 -Version antes
 .\scripts\probar.ps1 -Version despues
