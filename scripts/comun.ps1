@@ -9,8 +9,11 @@ $Raiz = Split-Path $PSScriptRoot -Parent
 $Lib = Join-Path $Raiz 'lib'
 $Unity = Join-Path $Raiz 'terceros\unity'
 
-# Opciones de compilación de C: C99 estricto, y cualquier aviso es un error.
-$OpcionesC = @('-std=c99', '-Wall', '-Wextra', '-Wpedantic', '-Werror')
+# Opciones de compilación de C: C99 estricto, las conversiones que pueden
+# cambiar un valor (-Wconversion, desde el submódulo 3.3), y cualquier aviso
+# es un error. El código heredado que no las cumple las quita en su
+# c/compilar.opciones con -Wno-conversion.
+$OpcionesC = @('-std=c99', '-Wall', '-Wextra', '-Wpedantic', '-Wconversion', '-Werror')
 
 function Buscar-Gcc {
     if ($env:CARDCODE_GCC -and (Test-Path $env:CARDCODE_GCC)) { return $env:CARDCODE_GCC }
