@@ -76,10 +76,3 @@ int liquidacion_calcular_redondeando(struct mov *movimientos, int n, long *neto,
     }
     return resultado;
 }
-
-int liquidar(struct mov *movimientos, int n, long *neto, unsigned short *comision, int modo)
-{
-    if (modo == 1)
-        return liquidacion_calcular_redondeando(movimientos, n, neto, comision);
-    return liquidacion_calcular(movimientos, n, neto, comision);
-}

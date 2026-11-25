@@ -25,7 +25,4 @@ extern unsigned short ult_comision;
 int liquidacion_calcular(struct mov *movimientos, int n, long *neto, unsigned short *comision);
 int liquidacion_calcular_redondeando(struct mov *movimientos, int n, long *neto, unsigned short *comision);
 
-/* La de antes: modo 1 = redondear la comision. Se quita en cuanto nadie la llame. */
-int liquidar(struct mov *movimientos, int n, long *neto, unsigned short *comision, int modo);
-
 #endif
