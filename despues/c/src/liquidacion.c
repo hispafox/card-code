@@ -15,6 +15,15 @@ static unsigned short liquidacion_comision(unsigned short importe)
     return comision;
 }
 
+static unsigned short liquidacion_redondear(unsigned short comision)
+{
+    unsigned short resto = comision % LIQUIDACION_REDONDEO;
+
+    if (resto == 0)
+        return comision;
+    return comision + (LIQUIDACION_REDONDEO - resto);
+}
+
 int liquidar(struct mov *movimientos, int n, long *neto, unsigned short *comision, int modo)
 {
     int i;
@@ -42,10 +51,8 @@ int liquidar(struct mov *movimientos, int n, long *neto, unsigned short *comisio
         }
     }
 
-    if (modo == 1) {
-        if (comision_total % LIQUIDACION_REDONDEO != 0)
-            comision_total = comision_total + (LIQUIDACION_REDONDEO - comision_total % LIQUIDACION_REDONDEO);
-    }
+    if (modo == 1)
+        comision_total = liquidacion_redondear(comision_total);
 
     *neto = acumulado;
     *comision = comision_total;
