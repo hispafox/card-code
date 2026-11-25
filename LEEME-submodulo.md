@@ -12,7 +12,7 @@
 
 | | Antes | Después |
 |---|---|---|
-| Llamadas de `TarjetaApplet` a métodos de sus propias clases | 13 (4 por interfaz) | 7 (ninguna por interfaz) |
+| Llamadas de `TarjetaApplet` a métodos de sus propias clases, sin contar los constructores | 12 (4 por interfaz) | 7 (ninguna por interfaz) |
 | Llamadas en el camino del pago | 4: `getValor` dos veces, `setValor` y `anotar` por la interfaz | 2: `descontar` y `anotar` |
 | Llamadas en el camino de la recarga | 5: `getMaximo`, `getValor` dos veces, `setValor` y `anotar` | 2: `cargar` y `anotar` |
 | Tipos del paquete | 5 (cuatro clases y una interfaz) | 3 clases |
