@@ -24,7 +24,8 @@ static unsigned short liquidacion_redondear(unsigned short comision)
     return comision + (LIQUIDACION_REDONDEO - resto);
 }
 
-int liquidar(struct mov *movimientos, int n, long *neto, unsigned short *comision, int modo)
+/* Deja el neto y la comision, sin redondear. Con un error, no toca las salidas. */
+static int liquidacion_acumular(struct mov *movimientos, int n, long *neto, unsigned short *comision)
 {
     int i;
     long acumulado = 0;
@@ -51,11 +52,19 @@ int liquidar(struct mov *movimientos, int n, long *neto, unsigned short *comisio
         }
     }
 
-    if (modo == 1)
-        comision_total = liquidacion_redondear(comision_total);
-
     *neto = acumulado;
     *comision = comision_total;
-    ult_comision = comision_total;
+    return 0;
+}
+
+int liquidar(struct mov *movimientos, int n, long *neto, unsigned short *comision, int modo)
+{
+    int resultado = liquidacion_acumular(movimientos, n, neto, comision);
+
+    if (resultado != 0)
+        return resultado;
+    if (modo == 1)
+        *comision = liquidacion_redondear(*comision);
+    ult_comision = *comision;
     return 0;
 }
