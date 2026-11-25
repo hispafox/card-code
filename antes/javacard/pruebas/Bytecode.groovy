@@ -21,10 +21,16 @@ class Bytecode {
         salida.toString()
     }
 
-    /** Las clases de java.* que usa, menos java.lang.Object, que Java Card sí tiene. */
+    /** Lo que Java Card trae de java.lang: Object, Throwable y las excepciones de la máquina virtual. */
+    static final Set<String> JAVA_LANG_DE_JAVA_CARD = ['Object', 'Throwable', 'Exception', 'RuntimeException',
+            'ArithmeticException', 'ArrayIndexOutOfBoundsException', 'ArrayStoreException', 'ClassCastException',
+            'IndexOutOfBoundsException', 'NegativeArraySizeException', 'NullPointerException',
+            'SecurityException'].collect { 'java/lang/' + it }.toSet()
+
+    /** Las clases de java.* que usa y que Java Card no tiene. */
     static Set<String> clasesDeJava(File clase) {
         (javap(clase, '-c', '-p') =~ /java[.\/](?:[a-z]\w*[.\/])+[A-Z][\w$]*/).collect { it.replace('.', '/') }
-                .findAll { it != 'java/lang/Object' }.toSet()
+                .findAll { !(it in JAVA_LANG_DE_JAVA_CARD) }.toSet()
     }
 
     /** Campos y métodos declarados con tipos que Java Card no tiene o que son opcionales. */
