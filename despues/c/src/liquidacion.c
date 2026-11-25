@@ -2,11 +2,21 @@
 
 unsigned short ult_comision;
 
+/* comision: 1 por ciento, minimo 5 */
+static unsigned short comision(unsigned short imp)
+{
+    unsigned short x = imp / 100;
+
+    if (x < 5)
+        x = 5;
+    return x;
+}
+
 int liquidar(struct mov *m, int n, long *neto, unsigned short *com, int modo)
 {
     int i;
     long tot = 0;
-    unsigned short c = 0, x;
+    unsigned short c = 0;
 
     if (n < 0 || n > MAXMOV)
         return -1;
@@ -15,22 +25,14 @@ int liquidar(struct mov *m, int n, long *neto, unsigned short *com, int modo)
         switch (m[i].t) {
         case 1: /* pago */
             tot = tot - m[i].imp;
-            /* comision: 1 por ciento, minimo 5 */
-            x = m[i].imp / 100;
-            if (x < 5)
-                x = 5;
-            c = c + x;
+            c = c + comision(m[i].imp);
             break;
         case 2: /* recarga */
             tot = tot + m[i].imp;
             break;
         case 3: /* devolucion */
             tot = tot + m[i].imp;
-            /* comision: 1 por ciento, minimo 5 */
-            x = m[i].imp / 100;
-            if (x < 5)
-                x = 5;
-            c = c + x;
+            c = c + comision(m[i].imp);
             break;
         default:
             return -2;
