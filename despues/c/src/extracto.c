@@ -97,9 +97,10 @@ uint16_t extracto_generar(const extracto_movimiento *movimientos, uint8_t n,
 uint16_t extracto_generar_con_totales(const extracto_movimiento *movimientos, uint8_t n,
                                       uint8_t *respuesta, uint16_t tam)
 {
-    uint16_t longitud = (uint16_t)(extracto_longitud(n) + EXTRACTO_LONGITUD_TOTALES);
+    uint16_t necesarios = (uint16_t)(extracto_longitud(n) + EXTRACTO_LONGITUD_TOTALES);
+    uint16_t longitud;
 
-    if (!extracto_se_puede_generar(movimientos, n, longitud, tam)) {
+    if (!extracto_se_puede_generar(movimientos, n, necesarios, tam)) {
         return 0u;
     }
     longitud = extracto_escribir_movimientos(movimientos, n, respuesta);
