@@ -19,8 +19,13 @@ struct mov {
 
 extern unsigned short ult_comision;
 
-/* Liquida los movimientos del dia. modo 1 = redondear la comision.
-   Devuelve 0 si va bien, LIQUIDACION_N_NO_VALE o LIQUIDACION_TIPO_DESCONOCIDO. */
+/* Liquidan los movimientos del dia; la segunda redondea la comision a la decena de arriba.
+   Devuelven 0 si va bien, LIQUIDACION_N_NO_VALE o LIQUIDACION_TIPO_DESCONOCIDO, y en ese
+   caso no tocan 'neto' ni 'comision'. */
+int liquidacion_calcular(struct mov *movimientos, int n, long *neto, unsigned short *comision);
+int liquidacion_calcular_redondeando(struct mov *movimientos, int n, long *neto, unsigned short *comision);
+
+/* La de antes: modo 1 = redondear la comision. Se quita en cuanto nadie la llame. */
 int liquidar(struct mov *movimientos, int n, long *neto, unsigned short *comision, int modo);
 
 #endif

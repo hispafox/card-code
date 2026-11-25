@@ -57,14 +57,29 @@ static int liquidacion_acumular(struct mov *movimientos, int n, long *neto, unsi
     return 0;
 }
 
-int liquidar(struct mov *movimientos, int n, long *neto, unsigned short *comision, int modo)
+int liquidacion_calcular(struct mov *movimientos, int n, long *neto, unsigned short *comision)
 {
     int resultado = liquidacion_acumular(movimientos, n, neto, comision);
 
-    if (resultado != 0)
-        return resultado;
-    if (modo == 1)
+    if (resultado == 0)
+        ult_comision = *comision;
+    return resultado;
+}
+
+int liquidacion_calcular_redondeando(struct mov *movimientos, int n, long *neto, unsigned short *comision)
+{
+    int resultado = liquidacion_acumular(movimientos, n, neto, comision);
+
+    if (resultado == 0) {
         *comision = liquidacion_redondear(*comision);
-    ult_comision = *comision;
-    return 0;
+        ult_comision = *comision;
+    }
+    return resultado;
+}
+
+int liquidar(struct mov *movimientos, int n, long *neto, unsigned short *comision, int modo)
+{
+    if (modo == 1)
+        return liquidacion_calcular_redondeando(movimientos, n, neto, comision);
+    return liquidacion_calcular(movimientos, n, neto, comision);
 }
