@@ -21,6 +21,6 @@ extern unsigned short ult_comision;
 
 /* Liquida los movimientos del dia. modo 1 = redondear la comision.
    Devuelve 0 si va bien, LIQUIDACION_N_NO_VALE o LIQUIDACION_TIPO_DESCONOCIDO. */
-int liquidar(struct mov *m, int n, long *neto, unsigned short *com, int modo);
+int liquidar(struct mov *movimientos, int n, long *neto, unsigned short *comision, int modo);
 
 #endif

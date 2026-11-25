@@ -6,36 +6,36 @@
 
 unsigned short ult_comision;
 
-static unsigned short comision(unsigned short imp)
+static unsigned short liquidacion_comision(unsigned short importe)
 {
-    unsigned short x = imp / LIQUIDACION_COMISION_DIVISOR;
+    unsigned short comision = importe / LIQUIDACION_COMISION_DIVISOR;
 
-    if (x < LIQUIDACION_COMISION_MINIMA)
-        x = LIQUIDACION_COMISION_MINIMA;
-    return x;
+    if (comision < LIQUIDACION_COMISION_MINIMA)
+        comision = LIQUIDACION_COMISION_MINIMA;
+    return comision;
 }
 
-int liquidar(struct mov *m, int n, long *neto, unsigned short *com, int modo)
+int liquidar(struct mov *movimientos, int n, long *neto, unsigned short *comision, int modo)
 {
     int i;
-    long tot = 0;
-    unsigned short c = 0;
+    long acumulado = 0;
+    unsigned short comision_total = 0;
 
     if (n < 0 || n > MAXMOV)
         return LIQUIDACION_N_NO_VALE;
 
     for (i = 0; i < n; i++) {
-        switch (m[i].t) {
+        switch (movimientos[i].t) {
         case LIQUIDACION_PAGO:
-            tot = tot - m[i].imp;
-            c = c + comision(m[i].imp);
+            acumulado = acumulado - movimientos[i].imp;
+            comision_total = comision_total + liquidacion_comision(movimientos[i].imp);
             break;
         case LIQUIDACION_RECARGA:
-            tot = tot + m[i].imp;
+            acumulado = acumulado + movimientos[i].imp;
             break;
         case LIQUIDACION_DEVOLUCION:
-            tot = tot + m[i].imp;
-            c = c + comision(m[i].imp);
+            acumulado = acumulado + movimientos[i].imp;
+            comision_total = comision_total + liquidacion_comision(movimientos[i].imp);
             break;
         default:
             return LIQUIDACION_TIPO_DESCONOCIDO;
@@ -43,12 +43,12 @@ int liquidar(struct mov *m, int n, long *neto, unsigned short *com, int modo)
     }
 
     if (modo == 1) {
-        if (c % LIQUIDACION_REDONDEO != 0)
-            c = c + (LIQUIDACION_REDONDEO - c % LIQUIDACION_REDONDEO);
+        if (comision_total % LIQUIDACION_REDONDEO != 0)
+            comision_total = comision_total + (LIQUIDACION_REDONDEO - comision_total % LIQUIDACION_REDONDEO);
     }
 
-    *neto = tot;
-    *com = c;
-    ult_comision = c;
+    *neto = acumulado;
+    *comision = comision_total;
+    ult_comision = comision_total;
     return 0;
 }
