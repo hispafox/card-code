@@ -1,14 +1,17 @@
 #include "liquidacion.h"
 
+#define LIQUIDACION_COMISION_DIVISOR  100   /* el 1 por ciento */
+#define LIQUIDACION_COMISION_MINIMA   5
+#define LIQUIDACION_REDONDEO          10    /* a la decena de arriba */
+
 unsigned short ult_comision;
 
-/* comision: 1 por ciento, minimo 5 */
 static unsigned short comision(unsigned short imp)
 {
-    unsigned short x = imp / 100;
+    unsigned short x = imp / LIQUIDACION_COMISION_DIVISOR;
 
-    if (x < 5)
-        x = 5;
+    if (x < LIQUIDACION_COMISION_MINIMA)
+        x = LIQUIDACION_COMISION_MINIMA;
     return x;
 }
 
@@ -19,30 +22,29 @@ int liquidar(struct mov *m, int n, long *neto, unsigned short *com, int modo)
     unsigned short c = 0;
 
     if (n < 0 || n > MAXMOV)
-        return -1;
+        return LIQUIDACION_N_NO_VALE;
 
     for (i = 0; i < n; i++) {
         switch (m[i].t) {
-        case 1: /* pago */
+        case LIQUIDACION_PAGO:
             tot = tot - m[i].imp;
             c = c + comision(m[i].imp);
             break;
-        case 2: /* recarga */
+        case LIQUIDACION_RECARGA:
             tot = tot + m[i].imp;
             break;
-        case 3: /* devolucion */
+        case LIQUIDACION_DEVOLUCION:
             tot = tot + m[i].imp;
             c = c + comision(m[i].imp);
             break;
         default:
-            return -2;
+            return LIQUIDACION_TIPO_DESCONOCIDO;
         }
     }
 
     if (modo == 1) {
-        /* redondear la comision a la decena de arriba */
-        if (c % 10 != 0)
-            c = c + (10 - c % 10);
+        if (c % LIQUIDACION_REDONDEO != 0)
+            c = c + (LIQUIDACION_REDONDEO - c % LIQUIDACION_REDONDEO);
     }
 
     *neto = tot;
