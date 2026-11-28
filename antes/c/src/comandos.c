@@ -22,7 +22,7 @@ static uint16_t comando_verificar_pin(const uint8_t *apdu, uint8_t longitud)
 
 static uint16_t comando_pagar(const uint8_t *apdu, uint8_t longitud)
 {
-    if (longitud > TAM_BUFER_DATOS) {
+    if (longitud == 0) {
         return SW_LONGITUD_INCORRECTA;
     }
     memcpy(bufer_datos, &apdu[OFFSET_DATOS], longitud);

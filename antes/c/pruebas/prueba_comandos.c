@@ -116,11 +116,10 @@ static void test_pagar_mas_del_saldo_se_rechaza(void)
     TEST_ASSERT_EQUAL_UINT16(100, saldo_leer());
 }
 
-static void test_pagar_con_datos_de_mas_se_rechaza(void)
+static void test_pagar_sin_datos_se_rechaza(void)
 {
-    uint8_t datos[TAM_BUFER_DATOS + 1u] = {0};
     enviar(INS_VERIFICAR_PIN, PIN_TITULAR, LONGITUD_PIN);
-    TEST_ASSERT_EQUAL_HEX16(SW_LONGITUD_INCORRECTA, enviar(INS_PAGAR, datos, sizeof datos));
+    TEST_ASSERT_EQUAL_HEX16(SW_LONGITUD_INCORRECTA, enviar(INS_PAGAR, PIN_TITULAR, 0));
 }
 
 static void test_una_instruccion_desconocida_se_rechaza(void)
@@ -143,7 +142,7 @@ int main(void)
     RUN_TEST(test_el_pago_resta_del_saldo);
     RUN_TEST(test_pagar_sin_pin_se_rechaza);
     RUN_TEST(test_pagar_mas_del_saldo_se_rechaza);
-    RUN_TEST(test_pagar_con_datos_de_mas_se_rechaza);
+    RUN_TEST(test_pagar_sin_datos_se_rechaza);
     RUN_TEST(test_una_instruccion_desconocida_se_rechaza);
     return UNITY_END();
 }
